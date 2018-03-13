@@ -3,7 +3,7 @@
 function backup_file {
     if [[ -z "$1" ]]
     then
-        print "$0 : Error   : filename (\$1) must be given" > /dev/stderr
+        print "$0 : ERROR   : filename (\$1) must be given" > /dev/stderr
         return 1
     fi
     
@@ -14,7 +14,7 @@ function backup_file {
         cp --verbose "${orig_file}" "${back_file}"
         return $?
     else
-        print "$0 : Warning : can't find '${orig_file}', skipping backup" > /dev/stderr
+        print "$0 : INFO    : '${orig_file}' is a new file, skipping backup" > /dev/stderr
     fi
 }
 
@@ -31,18 +31,12 @@ function backup_file_and_overwrite {
         print "$0 : Error   : destination filename (\$2) must be given" > /dev/stderr
         return 1
     fi
-    typeset -r destination="$2"
+    typeset destination_file="${2}"
 
     # Check if the destination is a directory only
-    typeset destination_file
-    if [[ -d "$destination" ]]
+    if [[ -d "${destination_file}" ]]
     then
-        destination_file="${destination}/$(basename "${source_file}")"
-    elif [[ -f "${destination}" ]]
-    then
-        destination_file="${destination}"
-    else
-        print "$0 : Error : '${destination}' is not a file nor a directory"
+        destination_file="${destination_file}/$(basename "${source_file}")"
     fi
 
     backup_file "${destination_file}"
