@@ -1,5 +1,13 @@
 #!/bin/ksh
 
+# Avoid multiple inclusions of this library
+if [[ -n "${__lib_sh}" ]]
+then
+    return
+else
+    typeset -ri __lib_sh=1
+fi
+
 function set_to_default_value {
     print "\$1 = '$1'"
 
